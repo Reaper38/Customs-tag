@@ -17,14 +17,32 @@ namespace PdfGen
 {
     public static class Pdf
     {
-        private static string[] text = new string[] {"FROM\n","PET IT PAQUET RECOMMANDE","T.P","CUSTOMS DECLARATION","May be opened officially","CN 22","Designated Operator",
-                "Gift","Commercial sample","Documents","Other","Quantity and detailed description of contents (1)",
-                "Weight\n(kg)(2)","Value (3)","Electronic components","For Commercial items only","HS tariff no (4)",
-                "Country of origin (5)","RU","Total weight\n(kg)(6)","Total value (7)",
-                "I certify that the particulars given in this customs declaration are " +
-                "correct and than this item does not contain any " +
-                "dangerous article prohibited by legislation or by postal or customs regulations.","Date and signature of sender (8):","To",
+        private static string[] outterText = new string[] {"FROM\n","PET IT PAQUET RECOMMANDE","T.P","To",
                 "Recepient","Weight, g"};
+
+        private static string[] boxedText = new string[] {"CUSTOMS DECLARATION",
+            "May be opened\nofficially",
+            "CN 22",
+            "Designated\nOperator",
+            "Gift",
+            "Commercial sample",
+            "Documents",
+            "Other",
+            "Quantity and detailed description\nof contents (1)",
+            "Weight\n(kg)(2)",
+            "Value (3)",
+            "Electronic components",
+            "For Commercial items only",
+            "HS tariff no (4)",
+            "Country of origin (5)",
+            "RU",
+            "Total weight\n(kg)(6)",
+            "Total\nvalue (7)",
+            "I certify that the particulars given in this customs declaration are " +
+                "correct and that\nthis item does not contain any " +
+                "dangerous article prohibited by\nlegislation or by postal or customs regulations.",
+            "Date and signature of sender (8):"};
+
         private static string[] from = new string[] { "Pavel Kovalenko\nAbelmanovskaya 11, 124\nMoscow, Russia\n", "109147" };
 
         private static PdfFont font = PdfFontFactory.CreateFont(FontConstants.TIMES_ROMAN);
@@ -42,19 +60,40 @@ namespace PdfGen
             PdfPage page = pdf.AddNewPage();
 
             Document document = new Document(pdf);
-            document.SetMargins(5f, 5f, 5f, 5f);
+            document.SetMargins(0f, 0f, 0f, 0f);
             Paragraph p = new Paragraph();
-            p.Add(new Text(text[0]).SetFont(bold));
+            p.Add(new Text(outterText[0]).SetFont(bold));
             p.Add(new Text(from[0]).SetFont(font));
             p.Add(new Text(from[1]).SetFont(bold));
 
             PdfCanvas pdfCanvas = new PdfCanvas(page);
-            Rectangle rectangle = new Rectangle(1, 350, 100, 100);
-            pdfCanvas.Rectangle(rectangle);
+            pdfCanvas.Rectangle(0, 300, 215, 150);//border
+            pdfCanvas.Rectangle(0, 300, 215, 10);//date
+            pdfCanvas.Rectangle(0, 310, 215, 20);//i certyfy
+
+            //pdfCanvas.Rectangle(0, 330, 60, 10);//origin
+            //pdfCanvas.Rectangle(60, 330, 60, 10);
+            //pdfCanvas.Rectangle(120, 330, 50, 10);
+            pdfCanvas.Rectangle(170, 330, 25, 10);
+
+            //pdfCanvas.Rectangle(0, 340, 200, 10);//hs
+            //pdfCanvas.Rectangle(60, 340, 60, 10);
+            //pdfCanvas.Rectangle(120, 340, 50, 10);
+            pdfCanvas.Rectangle(190, 340, 25, 10);
+
+            pdfCanvas.Rectangle(0, 350, 215, 10);//for
+            pdfCanvas.Rectangle(0, 360, 215, 10);//electronic
+            pdfCanvas.Rectangle(0, 370, 215, 20);//quantity
+            pdfCanvas.Rectangle(0, 390, 215, 20);//gift
+            pdfCanvas.Rectangle(0, 410, 215, 20);//designated
+            pdfCanvas.Rectangle(0, 430, 215, 20);//customs
             pdfCanvas.Stroke();
-            Canvas canvas = new Canvas(pdfCanvas, pdf, rectangle);
-            //canvas.Add(p);
+            //Canvas canvas = new Canvas(pdfCanvas, pdf, rectangle);
+
+           // var pa = new Paragraph(new Text(boxedText[19]).SetFont(font).SetFontSize(6));
+
             document.Add(p);
+           // document.Add(pa);
             document.Close();
             pdf.Close();
         }
